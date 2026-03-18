@@ -25,21 +25,23 @@ public:
         string Email,
         string PhysicalAddress,
         string DateOfBirth,
-        string AccountType,
-        string InitialDeposit,
+        double InitialDeposit,
         string BranchCode,
-        string PIN);
+        string PIN); // done
 
-    void ViewCustomerDetails();
     void GenerateReport();
     bool validateCustomerPin(string pin);
-
+    void ViewCustomerDetails(Account acc); // done
     void Deposit(double amount, string customerPin);
     void Withdraw(string customerPin);
     void Transfer(string customerPin);
 
-    bool Login(); // success
-    void StoreTellerCredentials(string TellerId, string FullName, string EncryptedPassword, string BranchCode);
+    bool Login(string intputTellerId, string inputPassword); // success
+    void StoreTellerCredentials(
+        string TellerId,
+        string FullName,
+        string EncryptedPassword,
+        string BranchCode); // done
     string generateTellerId();
 
     string GenerateAccountNumber(string account, string branch, string lastDigits);

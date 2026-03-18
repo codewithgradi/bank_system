@@ -5,8 +5,10 @@ using namespace std;
 
 class Account
 {
-
 private:
+    double balance;
+
+public:
     string AccountNumber;
     string Fullname;
     string SaId;
@@ -14,34 +16,106 @@ private:
     string Email;
     string PhysicalAddress;
     string DateOfBirth;
-    string AccountType;
-    string InitialDeposit;
+    double InitialDeposit;
     string BranchCode;
     string PIN;
 
-    double balance;
-
 public:
-    bool login(string accountNumber, string pin);
-    void ChangePin(string newPin);
-    void ViewAccountStatement();
-    void Deposit(double amount, string customerPin);
-    void Withdraw(string customerPin);
+    Account(
+        string accNo,
+        string fname,
+        string id,
+        string contactNum,
+        string email,
+        string physicalAdd,
+        string dob,
+        double initDepo,
+        string branchCode,
+        string pin)
+        : AccountNumber(accNo),
+          Fullname(fname),
+          SaId(id),
+          ContactNumber(contactNum),
+          Email(email),
+          PhysicalAddress(physicalAdd),
+          DateOfBirth(dob),
+          InitialDeposit(initDepo),
+          BranchCode(branchCode),
+          PIN(pin)
+    {
+    }
+    bool login(string accountNumber, string pin);     // done
+    void ChangePin(string newPin, string currentPin); // done
+    void ViewAccountStatement(string pin);
+    void Deposit(double amount, string customerPin);  // done
+    void Withdraw(double amount, string customerPin); // done
     void Transfer(string customerPin);
-    string GenerateFiveDigits();
-    bool validateId(string id);
-    bool validateEmail(string email);
+    string GenerateFiveDigits();      // done
+    bool validateId(string id);       // done
+    bool validateEmail(string email); // done
+    bool validatePin(string pin);     // done
+
+    virtual ~Account() {};
 };
 
-class Savings : Account
+class Savings : public Account
 {
+public:
+    Savings(
+        string accNo,
+        string fname,
+        string id,
+        string contactNum,
+        string email,
+        string physicalAdd,
+        string dob,
+        double initDepo,
+        string branchCode,
+        string pin) : Account(accNo, fname, id, contactNum, email, physicalAdd, dob, initDepo, branchCode, pin) {}
 };
-class Cheque : Account
+class Cheque : public Account
 {
+public:
+    Cheque(
+        string accNo,
+        string fname,
+        string id,
+        string contactNum,
+        string email,
+        string physicalAdd,
+        string dob,
+        double initDepo,
+        string branchCode,
+        string pin)
+        : Account(accNo, fname, id, contactNum, email, physicalAdd, dob, initDepo, branchCode, pin) {}
 };
-class FixedDeposit : Account
+class FixedDeposit : public Account
 {
+public:
+    FixedDeposit(
+        string accNo,
+        string fname,
+        string id,
+        string contactNum,
+        string email,
+        string physicalAdd,
+        string dob,
+        double initDepo,
+        string branchCode,
+        string pin) : Account(accNo, fname, id, contactNum, email, physicalAdd, dob, initDepo, branchCode, pin) {}
 };
-class Student : Account
+class Student : public Account
 {
+public:
+    Student(
+        string accNo,
+        string fname,
+        string id,
+        string contactNum,
+        string email,
+        string physicalAdd,
+        string dob,
+        double initDepo,
+        string branchCode,
+        string pin) : Account(accNo, fname, id, contactNum, email, physicalAdd, dob, initDepo, branchCode, pin) {}
 };
