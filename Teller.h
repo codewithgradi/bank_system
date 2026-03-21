@@ -29,8 +29,8 @@ public:
         string BranchCode,
         string PIN); // done
 
-    void GenerateReport();
-    bool validateCustomerPin(string pin);
+    void GenerateReport();                                   // done
+    bool validateCustomerPin(string pin);                    // done
     void ViewCustomerDetails(Account acc);                   // done
     bool Login(string intputTellerId, string inputPassword); // success
     void StoreTellerCredentials(

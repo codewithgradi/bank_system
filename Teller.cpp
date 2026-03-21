@@ -256,8 +256,73 @@ string Teller::generateTellerId()
     return ss.str();
 }
 string Teller::GenerateFiveDigits()
+
 {
     srand(time(0));
     int randomFiveDigit = rand() % 90000 + 10000;
     return to_string(randomFiveDigit);
+}
+void Teller::GenerateReport()
+{
+
+    cout << "Branch reports: Total Number of customers for this branch" << endl;
+
+    ifstream file("cusotmers.dat");
+    string line;
+    int numberOfCustomers = 0;
+
+    while (getline(file, line))
+    {
+        stringstream ss(line);
+        string accNo, fname, id, contactNum, email, physicalAdd, dob, branchCode, pin, initDepo;
+
+        getline(ss, accNo, ',');
+        getline(ss, fname, ',');
+        getline(ss, id, ',');
+        getline(ss, contactNum, ',');
+        getline(ss, email, ',');
+        getline(ss, physicalAdd, ',');
+        getline(ss, dob, ',');
+        getline(ss, initDepo, ',');
+        getline(ss, branchCode, ',');
+        getline(ss, pin, ',');
+
+        if (BranchCode == branchCode)
+        {
+            numberOfCustomers++;
+        }
+    }
+
+    cout << "Toatl clients: " << numberOfCustomers << endl;
+}
+bool Teller::validateCustomerPin(string pin)
+{
+
+    ifstream file("customers.dat");
+
+    if (!file.is_open())
+    {
+        cout << "File is closed." << endl;
+        return false;
+    }
+    string line;
+    bool bfound = false;
+
+    while (getline(file, line))
+    {
+        int pinFromFilePosition = line.find_last_of(',');
+        string pinFromFile = line.substr(pinFromFilePosition);
+        if (pinFromFile == pin)
+        {
+            bfound = true;
+            break;
+        }
+    }
+
+    if (bfound == false)
+    {
+        cout << "Account with pin " << pin << " does not exist." << endl;
+    }
+
+    return bfound;
 }
