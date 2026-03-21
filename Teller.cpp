@@ -3,6 +3,7 @@
 #include "Customer.h"
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 // #include <vector>
 #include <sstream>
 #include <string>
@@ -106,7 +107,29 @@ void Teller::RegisterCustomer(
         return;
     }
 
-    cout << "Account was created. " << endl;
+    ofstream outputFile("customers.dat", ios::app);
+
+    try
+    {
+
+        outputFile << acc->AccountNumber
+                   << "," << acc->Fullname
+                   << "," << acc->SaId
+                   << "," << acc->ContactNumber
+                   << "," << acc->Email
+                   << "," << acc->PhysicalAddress
+                   << "," << acc->DateOfBirth
+                   << "," << acc->InitialDeposit
+                   << "," << acc->BranchCode
+                   << "," << acc->PIN << endl;
+
+        cout << "Account was created. " << endl;
+    }
+    catch (...)
+    {
+        cout << "Could not save customer" << endl;
+    }
+    outputFile.close();
 }
 
 bool Teller::Login(
@@ -115,7 +138,7 @@ bool Teller::Login(
     string inputPassword)
 {
 
-    ifstream file("tellers.bat");
+    ifstream file("tellers.dat");
     string line;
 
     if (!file.is_open())
@@ -152,7 +175,7 @@ void StoreTellerCredentials(
     string EncryptedPassword,
     string BranchCode)
 {
-    ofstream file("tellers.bat", ios::app);
+    ofstream file("tellers.dat", ios::app);
 
     if (!file.is_open())
     {
@@ -179,4 +202,62 @@ void Teller::ViewCustomerDetails(Account customerAccount)
     cout << "PIN  : " << customerAccount.PIN << endl;
 }
 
-// string Teller::GenerateAccountNumber(){}
+string Teller::GenerateAccountNumber(string tellerId, string typeOfAccount)
+{
+    ifstream file("tellers.dat");
+    string line;
+    bool found = false;
+    string generateAccountNumber = "";
+    while (getline(file, line))
+    {
+        stringstream ss(line);
+        string tellerIdFromfile, fname, password, code;
+        getline(ss, tellerIdFromfile, ',');
+        getline(ss, fname, ',');
+        getline(ss, password, ',');
+        getline(ss, code, ',');
+
+        if (tellerId == tellerIdFromfile)
+        {
+            found = true;
+            string generatedAccountNumber = typeOfAccount + '-' + code + '-' + GenerateFiveDigits();
+            break;
+        }
+    }
+    if (found)
+    {
+        return generateAccountNumber;
+    }
+    else
+    {
+        cout << "Error: could not create account number." << endl;
+        return generateAccountNumber;
+    }
+}
+
+string Teller::generateTellerId()
+{
+    ifstream file("tellers.dat");
+    string line;
+    int numberOfTellers = 0;
+
+    while (getline(file, line))
+    {
+        if (!line.empty())
+        {
+            numberOfTellers++;
+        }
+    }
+    file.close();
+
+    stringstream ss;
+
+    ss << "T" << setfill('0') << setw(3) << numberOfTellers;
+    return ss.str();
+}
+string Teller::GenerateFiveDigits()
+{
+    srand(time(0));
+    int randomFiveDigit = rand() % 90000 + 10000;
+    return to_string(randomFiveDigit);
+}

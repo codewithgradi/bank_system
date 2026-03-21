@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <regex>
 using namespace std;
+// fix the balance issues
 
 bool Account::validatePin(string pin)
 {
@@ -169,6 +170,65 @@ bool Account::validateEmail(string email)
 }
 void Account::ViewAccountStatement(string pin)
 {
+    if (!validatePin(pin))
+    {
+        cout << 'Invalid session.' << endl;
+        return;
+    }
+
+    vector<string> transactions = GetTransactions(pin);
+
+    cout << "Statement of " << Fullname << endl;
+
+    for (string transaction : transactions)
+    {
+        stringstream ss(transaction);
+        string date, type, interest, pin;
+
+        getline(ss, date, ',');
+        getline(ss, type, ',');
+        getline(ss, interest, ',');
+        getline(ss, pin, ',');
+
+        cout << date << "\t" << type << '\t' << interest << "\t" << endl;
+    }
+
+    cout << "Available Balance : " << "\t" << balance << endl;
+}
+
+vector<string> Account::GetTransactions(string pin)
+{
+    if (!validatePin(pin))
+    {
+        cout << "Invalid Session." << endl;
+        return {};
+    };
+
+    ifstream file("transactions.bat");
+
+    string line;
+
+    vector<string> transactions;
+
+    while (getline(file, line))
+    {
+        stringstream ss(line);
+
+        string date, type, interest, PinFromFile;
+
+        getline(ss, date, ',');
+        getline(ss, type, ',');
+        getline(ss, interest, ',');
+        getline(ss, PinFromFile, ',');
+
+        if (pin == PinFromFile)
+        {
+
+            transactions.push_back(line);
+        }
+    }
+
+    return transactions;
 }
 
 bool Account::login(string accountNumber, string inputPin)
@@ -219,6 +279,86 @@ bool Account::login(string accountNumber, string inputPin)
     return found;
 }
 
-void Account::Transfer(string customerPin) {
-    //
+void Account::Transfer(string customerPin, double amount, string receiverPin)
+{
+    if (!validatePin(customerPin))
+    {
+
+        cout << "Invalid session" << endl;
+        return;
+    }
+
+    if (!validatePin(receiverPin))
+    {
+        cout << "User does not exist.";
+        return;
+    }
+
+    if (balance < (abs(amount) + balance * getInterest()))
+    {
+
+        cout << "Insuficient funds.";
+        return;
+    }
+    // coming back
+
+    ifstream readingFile("customers.dat");
+    ofstream outputFile("temp");
+
+    string line;
+    bool found = false;
+
+    while (getline(readingFile, line))
+    {
+        stringstream ss(line);
+
+        string accNo, fname, id, contactNum, email, physicalAdd, dob, branchCode, pin, initDepo;
+
+        getline(ss, accNo, ',');
+        getline(ss, fname, ',');
+        getline(ss, id, ',');
+        getline(ss, contactNum, ',');
+        getline(ss, email, ',');
+        getline(ss, physicalAdd, ',');
+        getline(ss, dob, ',');
+        getline(ss, initDepo, ',');
+        getline(ss, branchCode, ',');
+        getline(ss, pin, ',');
+
+        if (receiverPin == pin)
+        {
+            found = true;
+            initDepo += amount;
+            outputFile << accNo
+                       << "," << fname
+                       << "," << id
+                       << "," << contactNum
+                       << "," << email
+                       << "," << physicalAdd
+                       << "," << dob
+                       << "," << initDepo
+                       << "," << branchCode
+                       << "," << pin << endl;
+        }
+        else
+        {
+            outputFile << "\n"
+                       << endl;
+        }
+    }
+
+    readingFile.close();
+    outputFile.close();
+
+    remove("customers.dat");
+    rename("temp.dat", "customers.dat");
+
+    if (found)
+    {
+        cout << "Tranfer was successful.";
+    }
+    else
+    {
+        cout << "Transfer failed. Try again later.";
+    }
 };

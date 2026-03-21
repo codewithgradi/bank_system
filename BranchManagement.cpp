@@ -58,7 +58,7 @@ public:
     static string comapareBranches()
     {
     }
-    static vector<Branch> searchBranchByBranchCity(string city)
+    static vector<Branch> searchBranchByBranchProvince(string prov)
     {
 
         ifstream file("branches.bat");
@@ -78,7 +78,7 @@ public:
             getline(ss, bcity, ',');
             getline(ss, bprov, ',');
 
-            if (city == bcity)
+            if (prov == bprov)
             {
                 searches.push_back(Branch(bname, bcode, baddress, bcity, bprov));
             }
@@ -91,15 +91,15 @@ public:
         vector<Branch> branches = {
 
             Branch("Musgrave Centre STD", "10322", "115 Musgrave Road", "Durban", "KZN"),
-            Branch("Waterfront STD", "80012", "19 Dock Road", "Cape Town", "Western Cape"),
-            Branch("Menlyn Park STD", "01815", "Atterbury Rd & Lois Ave", "Pretoria", "Gauteng"),
+            Branch("Waterfront STD", "80012", "19 Dock Road", "Cape Town", "WC"),
+            Branch("Menlyn Park STD", "01815", "Atterbury Rd & Lois Ave", "Pretoria", "GAU"),
             Branch("Gateway Theatre STD", "43190", "1 Prestige Place", "Umhlanga", "KZN"),
-            Branch("Rosebank Mall STD", "21960", "50 Bath Avenue", "Johannesburg", "Gauteng"),
-            Branch("Walmer Park STD", "60701", "16th Avenue", "Gqeberha", "Eastern Cape"),
-            Branch("Loch Logan STD", "93014", "105 Henry Street", "Bloemfontein", "Free State"),
+            Branch("Rosebank Mall STD", "21960", "50 Bath Avenue", "Johannesburg", "GAU"),
+            Branch("Walmer Park STD", "60701", "16th Avenue", "Gqeberha", "EC"),
+            Branch("Loch Logan STD", "93014", "105 Henry Street", "Bloemfontein", "FS"),
             Branch("Liberty Mall STD", "32011", "50 Sanctuary Road", "Pietermaritzburg", "KZN"),
             Branch("Ballito Junction STD", "44203", "Leonora Drive", "Ballito", "KZN"),
-            Branch("Somerset Mall STD", "71302", "Centenary Drive", "Somerset West", "Western Cape")
+            Branch("Somerset Mall STD", "71302", "Centenary Drive", "Somerset West", "WC")
 
         };
 
