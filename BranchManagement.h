@@ -34,4 +34,5 @@ public:
     static void viewBranchDetails(Branch branch);
     static void viewAllBranches();
     static vector<Branch> searchBranchByBranchProvince(string prov);
+    static void branch_performance_report(Branch branch);
 };

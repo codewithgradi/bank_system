@@ -6,7 +6,7 @@ using namespace std;
 class Teller
 {
 
-private:
+public:
     string TellerId;
     string FullName;
     string EncryptedPassword;
@@ -14,7 +14,8 @@ private:
 
 public:
     // Constructor
-    Teller(string TellerId, string FullName, string EncryptedPassword, string BranchCode);
+    Teller(string id, string name, string pass, string code)
+        : TellerId(id), FullName(name), EncryptedPassword(pass), BranchCode(code) {};
 
     //
     void RegisterCustomer(
@@ -40,6 +41,9 @@ public:
         string BranchCode);      // done
     string generateTellerId();   // done
     string GenerateFiveDigits(); // done
+    void customer_account_summary(string pin);
+
+    void customer_daily_transactions(string pin);
 
     string GenerateAccountNumber(string tellerId, string typeOfAccount); // done
 };

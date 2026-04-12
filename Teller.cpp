@@ -1,6 +1,8 @@
 #include "Teller.h"
 #include "Cipher.h"
+#include "Transaction.h"
 #include "Customer.h"
+#include "System.h"
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -133,7 +135,6 @@ void Teller::RegisterCustomer(
 }
 
 bool Teller::Login(
-
     string intputTellerId,
     string inputPassword)
 {
@@ -325,4 +326,76 @@ bool Teller::validateCustomerPin(string pin)
     }
 
     return bfound;
+}
+
+void Teller::customer_account_summary(string pin)
+{
+
+    vector<Transaction> allTransactions = System::get_sample_transactions();
+    cout << "\n--- Account Summary for PIN: " << pin << " ---" << endl;
+    cout << "Date       | Type     | Amount" << endl;
+    cout << "-----------------------------------" << endl;
+
+    bool found = false;
+    for (const auto &tx : allTransactions)
+    {
+        if (tx.Pin == pin)
+        {
+            string typeStr = (tx.Type == TransactionType::Deposit) ? "Deposit " : (tx.Type == TransactionType::Withdraw) ? "Withdraw"
+                                                                                                                         : "Transfer";
+
+            cout << tx.Date << " | " << typeStr << " | R" << tx.Amount << endl;
+            found = true;
+        }
+    }
+
+    if (!found)
+    {
+        cout << "No transactions found for this account." << endl;
+    }
+}
+string getCurrentDate()
+{
+    time_t t = time(0);
+    tm *now = localtime(&t);
+
+    stringstream ss;
+    ss << (now->tm_year + 1900) << '-'
+       << setfill('0') << setw(2) << (now->tm_mon + 1) << '-'
+       << setfill('0') << setw(2) << now->tm_mday;
+
+    return ss.str();
+}
+
+void Teller::customer_daily_transactions(string pin)
+{
+    if (!validateCustomerPin(pin))
+    {
+        return;
+    }
+    // In a real system, you'd get this from the system clock
+    string currentDay = getCurrentDate();
+    vector<Transaction> allTransactions = System::get_sample_transactions();
+
+    cout << "\n--- Daily Transactions (" << currentDay << ") ---" << endl;
+
+    bool found = false;
+    for (const auto &tx : allTransactions)
+    {
+        if (tx.Pin == pin && tx.Date == currentDay)
+        {
+            string typeStr = (tx.Type == TransactionType::Deposit) ? "Deposit " 
+            : (tx.Type == TransactionType::Withdraw) ? 
+            "Withdraw"
+          : "Transfer";
+
+            cout << "[" << typeStr << "] R" << tx.Amount << endl;
+            found = true;
+        }
+    }
+
+    if (!found)
+    {
+        cout << "No transactions recorded for today." << endl;
+    }
 }

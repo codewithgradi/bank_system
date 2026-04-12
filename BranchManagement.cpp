@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include "BranchManagement.h"
+#include "System.h"
 
 using namespace std;
 
@@ -55,6 +56,31 @@ void BranchManagement::viewBranchDetails(Branch branch)
 }
 string BranchManagement::comapareBranches()
 {
+    // Start the string with a header
+    string report = "Branch Customer Statistics:\n";
+    report += "---------------------------\n";
+
+        auto branches = System::get_sample_branches();
+    auto customers = System::get_sample_customers();
+
+    for (const auto &branch : branches)
+    {
+        int count = 0;
+
+        for (const auto &customer : customers)
+        {
+            if (customer.BranchCode == branch.BranchCode)
+            {
+                count++;
+            }
+        }
+
+        report += "Branch: " + branch.BranchName + " (" + branch.BranchCode + ")\n";
+        report += "Total Customers: " + to_string(count) + "\n";
+        report += "---------------------------\n";
+    }
+
+    return report;
 }
 vector<Branch> BranchManagement::searchBranchByBranchProvince(string prov)
 {
