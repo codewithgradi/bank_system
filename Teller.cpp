@@ -6,7 +6,6 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-// #include <vector>
 #include <sstream>
 #include <string>
 
@@ -384,10 +383,9 @@ void Teller::customer_daily_transactions(string pin)
     {
         if (tx.Pin == pin && tx.Date == currentDay)
         {
-            string typeStr = (tx.Type == TransactionType::Deposit) ? "Deposit " 
-            : (tx.Type == TransactionType::Withdraw) ? 
-            "Withdraw"
-          : "Transfer";
+            string typeStr = (tx.Type == TransactionType::Deposit)    ? "Deposit "
+                             : (tx.Type == TransactionType::Withdraw) ? "Withdraw"
+                                                                      : "Transfer";
 
             cout << "[" << typeStr << "] R" << tx.Amount << endl;
             found = true;
