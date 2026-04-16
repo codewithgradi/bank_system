@@ -156,7 +156,7 @@ bool Teller::Login(
         getline(ss, password, ',');
         getline(ss, branchCode, ',');
 
-        if (tellerId == intputTellerId && password == inputPassword)
+        if (tellerId == intputTellerId && password == Cipher::Encrypt(inputPassword))
         {
             cout << "Welcome, " << fullname << endl;
             file.close();

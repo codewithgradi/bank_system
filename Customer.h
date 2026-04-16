@@ -6,7 +6,7 @@ using namespace std;
 
 class Account
 {
-private:
+public:
     double balance;
 
 public:
@@ -145,8 +145,17 @@ public:
     }
 };
 enum TransactionType
+
 {
     Deposit,
     Withdraw,
     Transfer
+};
+
+enum TypeOfAccount
+{
+    SAVG,
+    CHEQ,
+    FIXD,
+    STUD
 };
